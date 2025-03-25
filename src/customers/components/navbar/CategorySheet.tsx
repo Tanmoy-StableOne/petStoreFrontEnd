@@ -12,18 +12,24 @@ import { Box } from "@mui/material";
 const categoryTwo:{[key:string]:any[]} = {
   men: menLevelTwo,
   women: womenLevelTwo,
-  electronic: electronicsLevelTwo,
+  electronics: electronicsLevelTwo,
   home_furniture: furnitureLevelTwo,
 };
 
 const categoryThree:{[key:string]:any[]} = {
   men: menLevelThree,
   women: womenLevelThree,
-  electronic: electronicsLevelThree,
+  electronics: electronicsLevelThree,
   home_furniture: furnitureLevelThree,
 };
 
+
 const CategorySheet = ({selectedCategory,setShowSheet}:any) => {
+
+  console.log("Selected Category:", selectedCategory);
+  console.log("Category Two Data:", categoryTwo[selectedCategory]);
+  console.log("Category Three Data:", categoryThree[selectedCategory]);
+
   const childCategory = (category: any, parentCategoryId: any) => {
     return category.filter(
       (child: any) => child.parentCategoryId === parentCategoryId

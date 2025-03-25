@@ -1,56 +1,60 @@
 import React from "react";
-import { mainCategory } from "../../../data/category/mainCategory";
+import { menLevelTwo } from "../../../data/category/level two/menLevelTwo";
+import { womenLevelThree } from "../../../data/category/level three/womenLevelThree";
+import { womenLevelTwo } from "../../../data/category/level two/womenLevelTwo";
+import { electronicsLevelTwo } from "../../../data/category/level two/electronicsLavelTwo";
+import { furnitureLevelTwo } from "../../../data/category/level two/furnitureLevleTwo";
+import { menLevelThree } from "../../../data/category/level three/menLevelThree";
+import { electronicsLevelThree } from "../../../data/category/level three/electronicsLevelThree";
+import { furnitureLevelThree } from "../../../data/category/level three/furnitureLevelThree";
 import { Box } from "@mui/material";
 
-interface Category {
-  name: string;
-  categoryId: string;
-  parentCategoryId?: string;
-  level: number;
-  levelThreeCategory?: Category[];
-}
+const categoryTwo:{[key:string]:any[]} = {
+  men: menLevelTwo,
+  women: womenLevelTwo,
+  electronic: electronicsLevelTwo,
+  home_furniture: furnitureLevelTwo,
+};
 
-const categoryTwo: Record<string, Category[]> = {};
-const categoryThree: Record<string, Category[]> = {};
+const categoryThree:{[key:string]:any[]} = {
+  men: menLevelThree,
+  women: womenLevelThree,
+  electronic: electronicsLevelThree,
+  home_furniture: furnitureLevelThree,
+};
 
-mainCategory.forEach((category) => {
-  categoryTwo[category.categoryId] = category.levelTwoCategory;
-
-  category.levelTwoCategory.forEach((subCategory) => {
-    categoryThree[subCategory.categoryId] = subCategory.levelThreeCategory || [];
-  });
-});
-
-const CategorySheet: React.FC = () => {
-  const childCategory = (category: Record<string, Category[]>, parentCategoryId: string) => {
-    return category[parentCategoryId] || [];
+const CategorySheet = ({selectedCategory,setShowSheet}:any) => {
+  const childCategory = (category: any, parentCategoryId: any) => {
+    return category.filter(
+      (child: any) => child.parentCategoryId === parentCategoryId
+    );
   };
 
   return (
-    <Box sx={{ zIndex: 2 }} className="bg-white shadow-lg lg:h-[470px] overflow-y-auto">
-      <div className="flex text-sm flex-wrap">
-        {mainCategory.map((category) => (
-          <div key={category.categoryId} className="p-4">
-            <p className="text-primary-color mb-5 font-semibold">{category.name}</p>
-            <ul className="space-y-3">
-              {childCategory(categoryTwo, category.categoryId).map((subCategory) => (
-                <div key={subCategory.categoryId}>
-                  <p className="font-medium">{subCategory.name}</p>
-                  <ul className="pl-4 space-y-2">
-                    {childCategory(categoryThree, subCategory.categoryId).map((levelThreeItem) => (
-                      <li key={levelThreeItem.categoryId} className="hover:text-primary-color cursor-pointer">
-                        {levelThreeItem.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+    <Box className='bg-white shadow-lg  lg:h-[500px] overflow-y-auto'>
+        <div className=' flex text-sm flex-wrap'>
+            {categoryTwo[selectedCategory]?.map((item: any,index) => 
+            <div  key={item.name} className={`p-8 lg:w-[20%] ${index%2===0?"bg-slate-50":"bg-white"}`}>
+
+                <p className='text-primary mb-5 font-semibold'>{item.name}</p>
+
+                <ul className='space-y-3'>
+                    {childCategory(categoryThree[selectedCategory], item.categoryId)?.map((item: any) => <div key={item.name}>
+
+                        <li 
+                        //onClick={()=>handleCategoryClick(item.categoryId)}
+                        className='hover:text-primary cursor-pointer'>
+                            {item.name}
+                        </li>
+
+                    </div>)}
+                </ul>
+
+
+            </div>)}
+        </div>
     </Box>
-  );
-};
+)
+}
 
 export default CategorySheet;

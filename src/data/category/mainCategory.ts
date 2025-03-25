@@ -1,147 +1,126 @@
 export const mainCategory = [
   {
-    name: "Dogs",
-    categoryId: "dogs",
+    name: "Men",
+    categoryId: "men",
     level: 1,
-    levelTwoCategory: [
-      {
-        name: "Food & Treats",
-        categoryId: "dogs_food_treats",
-        parentCategoryId: "dogs",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Dry Food", categoryId: "dogs_food_treats_dry", level: 3 },
-          { name: "Wet Food", categoryId: "dogs_food_treats_wet", level: 3 },
-          { name: "Treats", categoryId: "dogs_food_treats_treats", level: 3 }
-        ]
-      },
-      {
-        name: "Toys & Accessories",
-        categoryId: "dogs_toys_accessories",
-        parentCategoryId: "dogs",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Chew Toys", categoryId: "dogs_toys_accessories_chew", level: 3 },
-          { name: "Fetch Toys", categoryId: "dogs_toys_accessories_fetch", level: 3 },
-          { name: "Collars & Leashes", categoryId: "dogs_toys_accessories_collars", level: 3 }
-        ]
-      },
-      {
-        name: "Health & Grooming",
-        categoryId: "dogs_health_grooming",
-        parentCategoryId: "dogs",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Shampoos & Conditioners", categoryId: "dogs_health_grooming_shampoos", level: 3 },
-          { name: "Brushes & Combs", categoryId: "dogs_health_grooming_brushes", level: 3 },
-          { name: "Dental Care", categoryId: "dogs_health_grooming_dental", level: 3 }
-        ]
-      },
-      {
-        name: "Beds & Crates",
-        categoryId: "dogs_beds_crates",
-        parentCategoryId: "dogs",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Soft Beds", categoryId: "dogs_beds_crates_soft", level: 3 },
-          { name: "Crate Pads", categoryId: "dogs_beds_crates_pads", level: 3 }
-        ]
-      }
+    levelTwoCategory:[
+        {
+            "name": "Topwere",
+            "categoryId": "men_topwear",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Bottomwere",
+            "categoryId": "men_bottomwear",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Innerwere And Sleepwere",
+            "categoryId": "men_innerwear_and_sleepwear",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Footwere",
+            "categoryId": "men_footwear",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Persional Care And  grooming",
+            "categoryId": "men_personal_care_and_grooming",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Fashion Accessories",
+            "categoryId": "men_fashion_accessories",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Gadgets",
+            "categoryId": "men_gadgets",
+            "parentCategoryId":"men",
+            "level":2
+        },
+        {
+            "name": "Bags And Backpacks",
+            "categoryId": "men_bags_and_backpacks",
+            "parentCategoryId":"men",
+            "level":2
+        }
     ]
   },
   {
-    name: "Cats",
-    categoryId: "cats",
+    name: "Women",
+    categoryId: "women",
     level: 1,
-    levelTwoCategory: [
-      {
-        name: "Food & Treats",
-        categoryId: "cats_food_treats",
-        parentCategoryId: "cats",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Dry Food", categoryId: "cats_food_treats_dry", level: 3 },
-          { name: "Wet Food", categoryId: "cats_food_treats_wet", level: 3 },
-          { name: "Treats", categoryId: "cats_food_treats_treats", level: 3 }
-        ]
-      },
-      {
-        name: "Toys & Scratchers",
-        categoryId: "cats_toys_scratchers",
-        parentCategoryId: "cats",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Interactive Toys", categoryId: "cats_toys_scratchers_interactive", level: 3 },
-          { name: "Catnip Toys", categoryId: "cats_toys_scratchers_catnip", level: 3 }
-        ]
-      },
-      {
-        name: "Litter & Accessories",
-        categoryId: "cats_litter_accessories",
-        parentCategoryId: "cats",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Clumping Litter", categoryId: "cats_litter_accessories_clumping", level: 3 },
-          { name: "Non-Clumping Litter", categoryId: "cats_litter_accessories_non_clumping", level: 3 },
-          { name: "Litter Boxes", categoryId: "cats_litter_accessories_boxes", level: 3 }
-        ]
-      }
-    ]
+    levelTowCategory:[
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Indian & fusion Wear",
+          "categoryId": "women_indian_and_fusion_wear"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"western wear",
+          "categoryId": "women_western_wear"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Footwear",
+          "categoryId": "women_footwear"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Sports & Active Wear",
+          "categoryId": "women_sports_active_wear"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Lingerie Sleepwear",
+          "categoryId": "women_lingerie_sleepwear"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Buauty & Personal Care",
+          "categoryId": "women_beauty_personal_care"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Gadgets",
+          "categoryId": "women_gadgets"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Jewellery",
+          "categoryId": "women_jewellery"
+        },
+        {
+          "parentCategoryId":"women",
+          "level":2,
+          "name":"Handbags, Bags & wallets",
+          "categoryId": "women_handbags_bags_wallets"
+        }
+      ]
+      
   },
   {
-    name: "Small Pets",
-    categoryId: "small_pets",
+    name: "Home & Furniture",
+    categoryId: "home_furniture",
     level: 1,
-    levelTwoCategory: [
-      {
-        name: "Food & Hay",
-        categoryId: "small_pets_food_hay",
-        parentCategoryId: "small_pets",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Pellets", categoryId: "small_pets_food_hay_pellets", level: 3 },
-          { name: "Timothy Hay", categoryId: "small_pets_food_hay_timothy", level: 3 }
-        ]
-      },
-      {
-        name: "Cages & Habitats",
-        categoryId: "small_pets_cages_habitats",
-        parentCategoryId: "small_pets",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Wire Cages", categoryId: "small_pets_cages_habitats_wire", level: 3 },
-          { name: "Plastic Habitats", categoryId: "small_pets_cages_habitats_plastic", level: 3 }
-        ]
-      }
-    ]
   },
-  {
-    name: "Fish & Aquatics",
-    categoryId: "fish_aquatics",
-    level: 1,
-    levelTwoCategory: [
-      {
-        name: "Fish Food & Care",
-        categoryId: "fish_food_care",
-        parentCategoryId: "fish_aquatics",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Flakes", categoryId: "fish_food_care_flakes", level: 3 },
-          { name: "Pellets", categoryId: "fish_food_care_pellets", level: 3 },
-          { name: "Live Food", categoryId: "fish_food_care_live", level: 3 }
-        ]
-      },
-      {
-        name: "Aquariums & Accessories",
-        categoryId: "fish_aquariums_accessories",
-        parentCategoryId: "fish_aquatics",
-        level: 2,
-        levelThreeCategory: [
-          { name: "Tanks", categoryId: "fish_aquariums_accessories_tanks", level: 3 },
-          { name: "Filters", categoryId: "fish_aquariums_accessories_filters", level: 3 },
-          { name: "Decorations", categoryId: "fish_aquariums_accessories_decorations", level: 3 }
-        ]
-      }
-    ]
-  }
+  
+  { name: "Electronics", categoryId: "electronics",level:1 },
 ];

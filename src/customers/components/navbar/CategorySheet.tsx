@@ -1,51 +1,50 @@
 import React from "react";
-import { menLevelTwo } from "../../../data/category/level two/menLevelTwo";
-import { womenLevelThree } from "../../../data/category/level three/womenLevelThree";
-import { womenLevelTwo } from "../../../data/category/level two/womenLevelTwo";
-import { electronicsLevelTwo } from "../../../data/category/level two/electronicsLavelTwo";
-import { furnitureLevelTwo } from "../../../data/category/level two/furnitureLevleTwo";
-import { menLevelThree } from "../../../data/category/level three/menLevelThree";
-import { electronicsLevelThree } from "../../../data/category/level three/electronicsLevelThree";
-import { furnitureLevelThree } from "../../../data/category/level three/furnitureLevelThree";
+import { mainCategory } from "../../../data/category/mainCategory";
 import { Box } from "@mui/material";
 
-const categoryTwo = {
-  men: menLevelTwo,
-  women: womenLevelTwo,
-  electronic: electronicsLevelTwo,
-  home_furniture: furnitureLevelTwo,
-};
+interface Category {
+  name: string;
+  categoryId: string;
+  parentCategoryId?: string;
+  level: number;
+  levelThreeCategory?: Category[];
+}
 
-const categoryThree = {
-  men: menLevelThree,
-  women: womenLevelThree,
-  electronic: electronicsLevelThree,
-  home_furniture: furnitureLevelThree,
-};
+const categoryTwo: Record<string, Category[]> = {};
+const categoryThree: Record<string, Category[]> = {};
 
-const CategorySheet = () => {
-  const childCategory = (category: any, parentCategoryId: any) => {
-    return category.filter(
-      (child: any) => child.parentCategoryId === parentCategoryId
-    );
+mainCategory.forEach((category) => {
+  categoryTwo[category.categoryId] = category.levelTwoCategory;
+
+  category.levelTwoCategory.forEach((subCategory) => {
+    categoryThree[subCategory.categoryId] = subCategory.levelThreeCategory || [];
+  });
+});
+
+const CategorySheet: React.FC = () => {
+  const childCategory = (category: Record<string, Category[]>, parentCategoryId: string) => {
+    return category[parentCategoryId] || [];
   };
 
   return (
-    <Box sx={{zIndex:2}} className="bg-white shadow-lg lg:h-[500px] overflow-y-auto">
+    <Box sx={{ zIndex: 2 }} className="bg-white shadow-lg lg:h-[470px] overflow-y-auto">
       <div className="flex text-sm flex-wrap">
-        {categoryTwo["men"]?.map((item) => (
-          <div>
-            <p className="text-primary-color mb-5 font-semibold">{item.name}</p>
+        {mainCategory.map((category) => (
+          <div key={category.categoryId} className="p-4">
+            <p className="text-primary-color mb-5 font-semibold">{category.name}</p>
             <ul className="space-y-3">
-              {childCategory(categoryThree["men"], item.categoryId).map(
-                (item:any) => (
-                  <div>
-                    <li className="hover:text-primary-color cursor-pointer">
-                      {item.name}
-                    </li>
-                  </div>
-                )
-              )}
+              {childCategory(categoryTwo, category.categoryId).map((subCategory) => (
+                <div key={subCategory.categoryId}>
+                  <p className="font-medium">{subCategory.name}</p>
+                  <ul className="pl-4 space-y-2">
+                    {childCategory(categoryThree, subCategory.categoryId).map((levelThreeItem) => (
+                      <li key={levelThreeItem.categoryId} className="hover:text-primary-color cursor-pointer">
+                        {levelThreeItem.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </ul>
           </div>
         ))}

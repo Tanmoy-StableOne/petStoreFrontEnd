@@ -1,0 +1,32 @@
+<aside class="sidebar" [class.expanded]="isExpanded" [class.collapsed]="!isExpanded">
+  <button class="sidebar-toggle" (click)="toggleSidebar()">
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <div id="leftside-navigation" class="nano-content">
+    <ul>
+      <li *ngFor="let item of menu" [class.has-submenu]="item.listOfSubMenu?.length"
+        [class.open]="openSubMenu === item.id">
+
+        <a [routerLink]="item.menuLink || null" (click)="handleItemClick(item, $event)">
+          <i class="fa" [class.fa-folder]="item.listOfSubMenu?.length"
+            [class.fa-file]="!item.listOfSubMenu?.length"></i>
+          <span class="menu-text">{{ item.menuName }}</span>
+          <!-- Simplified arrow implementation -->
+          <i *ngIf="item.listOfSubMenu?.length" class="fa arrow" [class.fa-angle-down]="openSubMenu === item.id"
+            [class.fa-angle-right]="openSubMenu !== item.id" style="color: #a8a9b4; font-size: 14px;"></i>
+        </a>
+
+        <ul *ngIf="item.listOfSubMenu?.length" class="submenu"
+          [style.display]="openSubMenu === item.id ? 'block' : 'none'">
+          <li *ngFor="let subItem of item.listOfSubMenu">
+            <a [routerLink]="subItem.menuLink">
+              <i class="fa fa-file"></i>
+              <span class="menu-text">{{ subItem.menuName }}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</aside>

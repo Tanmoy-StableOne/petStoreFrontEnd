@@ -1,0 +1,141 @@
+/* sidebar.component.css */
+.sidebar {
+  width: 60px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #2b2f3a;
+  color: #fff;
+  overflow-x: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  padding-top: 50px;
+}
+
+.sidebar.expanded {
+  width: 250px;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.nano-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.nano-content ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nano-content li {
+  position: relative;
+  white-space: nowrap;
+}
+
+.nano-content li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: #a8a9b4;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.nano-content li a:hover {
+  color: #fff;
+  background: #1e2025;
+}
+
+.nano-content li a i {
+  font-size: 18px;
+  min-width: 20px;
+  text-align: center;
+  margin-right: 15px;
+}
+
+.menu-text {
+  opacity: 0;
+  transition: opacity 0.3s;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar.expanded .menu-text {
+  opacity: 1;
+  width: auto;
+}
+
+/* Active state */
+.nano-content li.active > a,
+.nano-content li.active > a:hover {
+  color: #fff;
+  background: #1e2025;
+}
+
+/* Submenu styles */
+.sub-menu > a .arrow {
+  margin-left: auto;
+  transition: transform 0.3s;
+}
+
+.sub-menu.open > a .arrow {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  background: #1e2025;
+  display: none;
+  padding-left: 20px;
+}
+
+.sub-menu.open .submenu {
+  display: block;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+  }
+
+  .sidebar.expanded {
+    width: 250px;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+  .sidebar {
+    width: 250px;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .menu-text {
+    opacity: 1;
+    width: auto;
+  }
+}

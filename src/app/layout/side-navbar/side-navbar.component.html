@@ -15,10 +15,12 @@
           <a *ngIf="item.doHaveRedirectionLink && item.menuLink" [routerLink]="item.menuLink" class="menu-link">
             <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
             <span class="menu-text">{{ item.menuName }}</span>
+            <span *ngIf="item.listOfSubMenu && item.listOfSubMenu.length > 0" class="dropdown-arrow">▼</span>
           </a>
           <span *ngIf="!item.doHaveRedirectionLink || !item.menuLink" class="menu-link">
             <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
             <span class="menu-text">{{ item.menuName }}</span>
+            <span *ngIf="item.listOfSubMenu && item.listOfSubMenu.length > 0" class="dropdown-arrow">▼</span>
           </span>
           
           <!-- Submenu -->

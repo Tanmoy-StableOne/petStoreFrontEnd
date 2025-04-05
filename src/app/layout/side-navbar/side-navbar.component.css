@@ -75,13 +75,14 @@
   position: relative;
 }
 
-.menu-link, .submenu-link {
+.menu-link {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
   color: #ecf0f1;
   text-decoration: none;
   transition: background-color 0.3s;
+  position: relative;
 }
 
 .menu-link:hover, .submenu-link:hover {
@@ -97,6 +98,16 @@
 
 .menu-text {
   white-space: nowrap;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  font-size: 0.8rem;
+  transition: transform 0.3s;
+}
+
+.has-submenu:hover .dropdown-arrow {
+  transform: rotate(180deg);
 }
 
 .submenu {

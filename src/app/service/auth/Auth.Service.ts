@@ -185,32 +185,23 @@ export class AuthService {
     const token = this.getToken();
     console.log('Token exists:', !!token);
     
+    // Clear session immediately
+    this.clearSession();
+    console.log('Session cleared immediately');
+    
     if (token) {
       const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'logout');
       console.log('Logout endpoint:', endpoint);
       
-      return this.http.post<void>(endpoint, {}).pipe(
-        tap(() => {
-          console.log('Logout API call successful');
-          this.clearSession();
-          console.log('Session cleared, redirecting to login page');
-          // Force reload to ensure all components update
-          window.location.href = '/login';
-        }),
-        catchError(error => {
-          console.error('Logout API call failed:', error);
-          this.clearSession();
-          console.log('Session cleared despite error, redirecting to login page');
-          // Force reload even on error
-          window.location.href = '/login';
-          return throwError(() => error);
-        })
-      );
+      // Make the API call but don't wait for it to complete
+      this.http.post<void>(endpoint, {}).subscribe({
+        next: () => console.log('Logout API call successful'),
+        error: (error) => console.error('Logout API call failed:', error)
+      });
     }
     
-    console.log('No token found, clearing session and redirecting');
-    this.clearSession();
-    // Force reload if no token
+    // Redirect immediately without waiting for the API call
+    console.log('Redirecting to login page immediately');
     window.location.href = '/login';
     return of(void 0);
   }

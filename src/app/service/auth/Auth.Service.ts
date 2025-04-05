@@ -181,17 +181,26 @@ export class AuthService {
 
   // Logout
   logout(): Observable<void> {
+    console.log('Logout method called');
     const token = this.getToken();
+    console.log('Token exists:', !!token);
+    
     if (token) {
       const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'logout');
+      console.log('Logout endpoint:', endpoint);
+      
       return this.http.post<void>(endpoint, {}).pipe(
         tap(() => {
+          console.log('Logout API call successful');
           this.clearSession();
+          console.log('Session cleared, redirecting to login page');
           // Force reload to ensure all components update
           window.location.href = '/login';
         }),
         catchError(error => {
+          console.error('Logout API call failed:', error);
           this.clearSession();
+          console.log('Session cleared despite error, redirecting to login page');
           // Force reload even on error
           window.location.href = '/login';
           return throwError(() => error);
@@ -199,6 +208,7 @@ export class AuthService {
       );
     }
     
+    console.log('No token found, clearing session and redirecting');
     this.clearSession();
     // Force reload if no token
     window.location.href = '/login';
@@ -207,19 +217,23 @@ export class AuthService {
 
   // Clear session data
   private clearSession(): void {
+    console.log('clearSession method called');
     // Clear all session storage
     sessionStorage.clear();
+    console.log('Session storage cleared');
     
     // Also explicitly remove our specific keys
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
     sessionStorage.removeItem(REFRESH_TOKEN_KEY);
     sessionStorage.removeItem(USER_ROLE_KEY);
     sessionStorage.removeItem(USERNAME_KEY);
+    console.log('Specific keys removed from session storage');
     
     // Update behavior subjects
     this.loginStatusSubject.next(false);
     this.userRoleSubject.next(USER_ROLE.GUEST);
     this.usernameSubject.next('');
+    console.log('Behavior subjects updated');
   }
 
   // Get stored username

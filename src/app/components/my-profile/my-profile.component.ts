@@ -27,12 +27,14 @@ export class MyProfileComponent implements OnInit {
   }
 
   logout(): void {
+    console.log('MyProfile logout button clicked');
     this.authService.logout().subscribe({
       next: () => {
+        console.log('MyProfile: Logout successful');
         // The service will handle the redirect
       },
       error: (error) => {
-        console.error('Logout error:', error);
+        console.error('MyProfile: Logout error:', error);
         // Force redirect to login page even on error
         window.location.href = '/login';
       }

@@ -131,12 +131,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    console.log('Navbar logout button clicked');
     this.authService.logout().subscribe({
       next: () => {
+        console.log('Navbar: Logout successful');
         // The service will handle the redirect
       },
       error: (error) => {
-        console.error('Logout error:', error);
+        console.error('Navbar: Logout error:', error);
         // Force redirect to login page even on error
         window.location.href = '/login';
       }

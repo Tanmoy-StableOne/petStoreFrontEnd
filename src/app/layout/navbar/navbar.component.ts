@@ -1,9 +1,11 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuService } from '../../service/menu/menu.service';
 import { MenuItem } from '../../interfaces/menu.interface';
 import { AuthService } from '../../service/auth/Auth.Service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -12,13 +14,15 @@ import { AuthService } from '../../service/auth/Auth.Service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
   isLoggedIn = false;
   userRole = '';
+  username = '';
   isMobileMenuOpen = false;
   activeSubmenuId: string | null = null;
   isMobileView = window.innerWidth <= 768;
+  private subscriptions: Subscription[] = [];
 
   @HostListener('window:resize')
   onResize() {
@@ -44,19 +48,46 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private menuService: MenuService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    // Check initial login state
+    this.isLoggedIn = this.authService.isUserLoggedIn();
+    this.userRole = this.authService.getUserRole();
+    this.username = this.authService.getUsername() || this.userRole;
+    
     this.loadMenuItems();
-    this.authService.loginStatus$.subscribe(status => {
-      this.isLoggedIn = status;
-      this.loadMenuItems();
-    });
-    this.authService.userRole$.subscribe(role => {
-      this.userRole = role;
-      this.loadMenuItems();
-    });
+    
+    // Subscribe to login status changes
+    this.subscriptions.push(
+      this.authService.loginStatus$.subscribe(status => {
+        this.isLoggedIn = status;
+        if (status) {
+          this.username = this.authService.getUsername() || this.userRole;
+        } else {
+          this.username = '';
+        }
+        this.loadMenuItems();
+      })
+    );
+    
+    // Subscribe to user role changes
+    this.subscriptions.push(
+      this.authService.userRole$.subscribe(role => {
+        this.userRole = role;
+        if (this.isLoggedIn) {
+          this.username = this.authService.getUsername() || role;
+        }
+        this.loadMenuItems();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscriptions
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   loadMenuItems(): void {
@@ -100,7 +131,16 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => {
+        // The service will handle the redirect
+      },
+      error: (error) => {
+        console.error('Logout error:', error);
+        // Force redirect to login page even on error
+        window.location.href = '/login';
+      }
+    });
     this.closeMenu();
   }
 
@@ -112,5 +152,9 @@ export class NavbarComponent implements OnInit {
       subMenuCount: item.listOfSubMenu?.length || 0,
       subMenuItems: item.listOfSubMenu
     });
+  }
+
+  navigateToProfile(): void {
+    this.router.navigate(['/my-profile']);
   }
 }

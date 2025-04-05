@@ -61,8 +61,7 @@
         <!-- Mobile Auth Menu Items -->
         <li class="nav-item mobile-auth">
           <ng-container *ngIf="isLoggedIn">
-            <span class="user-role">{{ userRole }}</span>
-            <button (click)="logout()" class="logout-btn">Logout</button>
+            <button (click)="navigateToProfile()" class="profile-btn">{{ username }}</button>
           </ng-container>
           <ng-container *ngIf="!isLoggedIn">
             <a routerLink="/login" class="login-btn" (click)="closeMenu()">Login</a>
@@ -74,8 +73,7 @@
     <!-- Desktop Auth Menu -->
     <div class="navbar-end desktop-auth">
       <ng-container *ngIf="isLoggedIn">
-        <span class="user-role">{{ userRole }}</span>
-        <button (click)="logout()" class="logout-btn">Logout</button>
+        <button (click)="navigateToProfile()" class="profile-btn">{{ username }}</button>
       </ng-container>
       <ng-container *ngIf="!isLoggedIn">
         <a routerLink="/login" class="login-btn">Login</a>

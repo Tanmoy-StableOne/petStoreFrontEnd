@@ -1,8 +1,10 @@
 .navbar {
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
 }
 
@@ -319,4 +321,25 @@
     text-align: center;
     justify-content: center;
   }
+}
+
+/* Add margin to the main content to account for fixed navbar */
+:host {
+  display: block;
+  margin-bottom: 60px; /* Adjust this value based on your navbar height */
+}
+
+.profile-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.profile-btn:hover {
+  background-color: #0056b3;
 }

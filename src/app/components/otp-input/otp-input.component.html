@@ -1,0 +1,8 @@
+<div class="otp-container" (paste)="onPaste($event)">
+  <div class="otp-input-group">
+    <input *ngFor="let digit of otp; let i = index; trackBy: trackByIndex" #otpInput type="text" maxlength="1"
+      (input)="onInputChange(i, $event)" (keydown)="onKeyDown(i, $event)" class="otp-input" inputmode="numeric"
+      [class.filled]="otp[i] !== ''" [class.active]="i === currentPosition" autocomplete="off" />
+
+  </div>
+</div>

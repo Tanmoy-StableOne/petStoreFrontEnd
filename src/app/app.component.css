@@ -1,0 +1,16 @@
+main {
+  padding-top: 60px;
+  min-height: calc(100vh - 60px);
+}
+
+main.with-side-navbar {
+  padding-top: 0;
+  margin-left: 250px;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  main.with-side-navbar {
+    margin-left: 70px;
+  }
+}

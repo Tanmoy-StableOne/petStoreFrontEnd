@@ -1,0 +1,14 @@
+<!-- Top Navbar for guests -->
+<div *ngIf="!useSideNavbar">
+  <app-navbar></app-navbar>
+</div>
+
+<!-- Side Navbar for logged-in users -->
+<div *ngIf="useSideNavbar">
+  <app-side-navbar></app-side-navbar>
+</div>
+
+<!-- Main content -->
+<main [class.with-side-navbar]="useSideNavbar">
+  <router-outlet></router-outlet>
+</main>

@@ -1,0 +1,53 @@
+<aside class="side-navbar" [class.expanded]="isExpanded">
+  <div class="side-navbar-header">
+    <div class="brand">
+      <a routerLink="/home">PetStore</a>
+    </div>
+    <button class="toggle-btn" (click)="toggleExpand()">
+      <span class="toggle-icon"></span>
+    </button>
+  </div>
+  
+  <div class="side-navbar-content">
+    <ul class="side-navbar-menu">
+      <li *ngFor="let item of menuItems" class="menu-item" [class.has-submenu]="item.listOfSubMenu && item.listOfSubMenu.length > 0">
+        <ng-container *ngIf="!item.isASubMenu">
+          <a *ngIf="item.doHaveRedirectionLink && item.menuLink" [routerLink]="item.menuLink" class="menu-link">
+            <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
+            <span class="menu-text">{{ item.menuName }}</span>
+          </a>
+          <span *ngIf="!item.doHaveRedirectionLink || !item.menuLink" class="menu-link">
+            <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
+            <span class="menu-text">{{ item.menuName }}</span>
+          </span>
+          
+          <!-- Submenu -->
+          <ul *ngIf="item.listOfSubMenu && item.listOfSubMenu.length > 0" class="submenu">
+            <li *ngFor="let subItem of item.listOfSubMenu" class="submenu-item">
+              <a *ngIf="subItem.doHaveRedirectionLink && subItem.menuLink" [routerLink]="subItem.menuLink" class="submenu-link">
+                <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">
+                <span class="menu-text">{{ subItem.menuName }}</span>
+              </a>
+              <span *ngIf="!subItem.doHaveRedirectionLink || !subItem.menuLink" class="submenu-link">
+                <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">
+                <span class="menu-text">{{ subItem.menuName }}</span>
+              </span>
+            </li>
+          </ul>
+        </ng-container>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="side-navbar-footer">
+    <ng-container *ngIf="isLoggedIn">
+      <div class="user-info">
+        <span class="user-role">{{ userRole }}</span>
+        <button (click)="logout()" class="logout-btn">Logout</button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!isLoggedIn">
+      <a routerLink="/login" class="login-btn">Login</a>
+    </ng-container>
+  </div>
+</aside>

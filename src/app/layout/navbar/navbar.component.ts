@@ -22,9 +22,13 @@ export class NavbarComponent implements OnInit {
 
   @HostListener('window:resize')
   onResize() {
+    const wasMobile = this.isMobileView;
     this.isMobileView = window.innerWidth <= 768;
-    if (!this.isMobileView) {
+    
+    // Reset states when switching between mobile and desktop
+    if (wasMobile !== this.isMobileView) {
       this.isMobileMenuOpen = false;
+      this.activeSubmenuId = null;
     }
   }
 
@@ -82,21 +86,12 @@ export class NavbarComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     
-    if (this.isMobileView) {
-      // For mobile: toggle submenu
-      this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
-    } else {
-      // For desktop: show on click, hide when clicking outside
-      this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
-    }
+    // Toggle submenu state
+    this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
   }
 
   isSubmenuActive(itemId: string): boolean {
-    if (this.isMobileView) {
-      return this.activeSubmenuId === itemId;
-    } else {
-      return this.activeSubmenuId === itemId;
-    }
+    return this.activeSubmenuId === itemId;
   }
 
   closeMenu(): void {

@@ -18,8 +18,10 @@
                [routerLink]="item.menuLink" 
                class="nav-link"
                (click)="closeMenu()">
-              <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
-              {{ item.menuName }}
+              <div>
+                <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
+                {{ item.menuName }}
+              </div>
             </a>
 
             <!-- Menu item with submenu -->
@@ -28,8 +30,10 @@
                [attr.href]="!item.doHaveRedirectionLink ? '#' : null"
                class="nav-link"
                (click)="toggleSubmenu($event, item.id)">
-              <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
-              {{ item.menuName }}
+              <div>
+                <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
+                {{ item.menuName }}
+              </div>
               <span class="dropdown-icon" [class.active]="isSubmenuActive(item.id)"></span>
             </a>
             
@@ -41,8 +45,10 @@
                    [routerLink]="subItem.menuLink" 
                    class="submenu-link"
                    (click)="closeMenu()">
-                  <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">
-                  {{ subItem.menuName }}
+                  <div>
+                    <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">
+                    {{ subItem.menuName }}
+                  </div>
                 </a>
                 <span *ngIf="!subItem.doHaveRedirectionLink || !subItem.menuLink" class="submenu-link">
                   <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">

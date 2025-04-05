@@ -45,11 +45,17 @@
     <ng-container *ngIf="isLoggedIn">
       <div class="user-info">
         <span class="user-role">{{ userRole }}</span>
-        <button (click)="logout()" class="logout-btn">Logout</button>
+        <button (click)="logout()" class="logout-btn">
+          <i class="material-icons logout-icon">logout</i>
+          <span class="logout-text">Logout</span>
+        </button>
       </div>
     </ng-container>
     <ng-container *ngIf="!isLoggedIn">
-      <a routerLink="/login" class="login-btn">Login</a>
+      <a routerLink="/login" class="login-btn">
+        <i class="material-icons login-icon">login</i>
+        <span class="login-text">Login</span>
+      </a>
     </ng-container>
   </div>
 </aside>

@@ -22,7 +22,9 @@
 
 .side-navbar:not(.expanded) .menu-text,
 .side-navbar:not(.expanded) .brand a,
-.side-navbar:not(.expanded) .user-role {
+.side-navbar:not(.expanded) .user-role,
+.side-navbar:not(.expanded) .logout-text,
+.side-navbar:not(.expanded) .login-text {
   display: none;
 }
 
@@ -162,6 +164,27 @@
   transition: all 0.3s;
   text-align: center;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.logout-icon, .login-icon {
+  font-size: 20px !important;
+  color: white;
+}
+
+.side-navbar:not(.expanded) .logout-btn,
+.side-navbar:not(.expanded) .login-btn {
+  width: auto;
+  padding: 0.5rem;
+  justify-content: center;
+}
+
+.side-navbar:not(.expanded) .logout-icon,
+.side-navbar:not(.expanded) .login-icon {
+  margin: 0;
 }
 
 .logout-btn {

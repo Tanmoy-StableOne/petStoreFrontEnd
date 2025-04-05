@@ -1,0 +1,79 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/home" (click)="closeMenu()">PetStore</a>
+      <button class="hamburger-menu" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    
+    <div class="navbar-menu" [class.is-active]="isMobileMenuOpen">
+      <ul class="navbar-nav">
+        <li *ngFor="let item of menuItems" class="nav-item" [class.has-submenu]="hasSubmenu(item)">
+          <ng-container *ngIf="!item.isASubMenu">
+            <!-- Menu item with link and no submenu -->
+            <a *ngIf="item.doHaveRedirectionLink && item.menuLink && !hasSubmenu(item)" 
+               [routerLink]="item.menuLink" 
+               class="nav-link"
+               (click)="closeMenu()">
+              <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
+              {{ item.menuName }}
+            </a>
+
+            <!-- Menu item with submenu -->
+            <a *ngIf="hasSubmenu(item)"
+               [routerLink]="item.doHaveRedirectionLink ? item.menuLink : null"
+               [attr.href]="!item.doHaveRedirectionLink ? '#' : null"
+               class="nav-link"
+               (click)="toggleSubmenu($event, item.id)">
+              <img *ngIf="item.svgFileBase64" [src]="item.svgFileBase64" alt="icon" class="menu-icon">
+              {{ item.menuName }}
+              <span class="dropdown-icon" [class.active]="isSubmenuActive(item.id)"></span>
+            </a>
+            
+            <!-- Submenu -->
+            <ul *ngIf="hasSubmenu(item)" class="submenu" 
+                [class.active]="isSubmenuActive(item.id)" role="menu">
+              <li *ngFor="let subItem of item.listOfSubMenu" class="submenu-item" role="menuitem">
+                <a *ngIf="subItem.doHaveRedirectionLink && subItem.menuLink" 
+                   [routerLink]="subItem.menuLink" 
+                   class="submenu-link"
+                   (click)="closeMenu()">
+                  <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">
+                  {{ subItem.menuName }}
+                </a>
+                <span *ngIf="!subItem.doHaveRedirectionLink || !subItem.menuLink" class="submenu-link">
+                  <img *ngIf="subItem.svgFileBase64" [src]="subItem.svgFileBase64" alt="icon" class="menu-icon">
+                  {{ subItem.menuName }}
+                </span>
+              </li>
+            </ul>
+          </ng-container>
+        </li>
+        <!-- Mobile Auth Menu Items -->
+        <li class="nav-item mobile-auth">
+          <ng-container *ngIf="isLoggedIn">
+            <span class="user-role">{{ userRole }}</span>
+            <button (click)="logout()" class="logout-btn">Logout</button>
+          </ng-container>
+          <ng-container *ngIf="!isLoggedIn">
+            <a routerLink="/login" class="login-btn" (click)="closeMenu()">Login</a>
+          </ng-container>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Desktop Auth Menu -->
+    <div class="navbar-end desktop-auth">
+      <ng-container *ngIf="isLoggedIn">
+        <span class="user-role">{{ userRole }}</span>
+        <button (click)="logout()" class="logout-btn">Logout</button>
+      </ng-container>
+      <ng-container *ngIf="!isLoggedIn">
+        <a routerLink="/login" class="login-btn">Login</a>
+      </ng-container>
+    </div>
+  </div>
+</nav>

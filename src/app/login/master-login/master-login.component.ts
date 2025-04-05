@@ -7,8 +7,8 @@ import { USER_ROLE } from '../../constants/Enums';
   standalone: true,
   imports: [BaseLoginComponent],
   template: `
-    <app-base-login 
-      title="Master" 
+    <app-base-login
+      title="Master"
       role="ROLE_MASTER">
     </app-base-login>
   `

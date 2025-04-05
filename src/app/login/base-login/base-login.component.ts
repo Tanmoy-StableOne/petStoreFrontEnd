@@ -132,16 +132,16 @@ export class BaseLoginComponent implements OnInit {
 
   private verifyOtp(): void {
     const otp = this.loginForm.get('otp')?.value;
-
-    this.http.post<any>(this.signInEndpoint, {
+    
+    this.http.post<any>(this.signInEndpoint, { 
       email: this.userEmail,
-      otp: otp
+      otp: otp 
     }).subscribe({
       next: (response) => {
         if (response.status && response.role === this.role) {
           this.authService.saveTokens(response.jwt, response.refreshToken);
           this.authService.saveUserRole(response.role);
-
+          
           // Navigate based on role
           switch(response.role) {
             case USER_ROLE.ROLE_MASTER:
@@ -171,8 +171,13 @@ export class BaseLoginComponent implements OnInit {
             default:
               this.router.navigate(['/']);
           }
-
+          
           this.snackBar.open(response.message || 'Login successful!', 'Close', { duration: 3000 });
+          
+          // Force reload to ensure navbar updates
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           this.snackBar.open('Invalid role for this login type', 'Close', { duration: 3000 });
         }

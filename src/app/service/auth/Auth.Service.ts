@@ -11,6 +11,7 @@ import { LoginResponse, LoginRequest, RefreshTokenRequest, TokenPayload } from '
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 const USER_ROLE_KEY = 'userRole';
+const USERNAME_KEY = 'username';
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +20,17 @@ export class AuthService {
   private jwtHelper = new JwtHelperService();
   private loginStatusSubject = new BehaviorSubject<boolean>(this.isUserLoggedIn());
   private userRoleSubject = new BehaviorSubject<string>(this.getStoredUserRole());
+  private usernameSubject = new BehaviorSubject<string>(this.getStoredUsername());
   
   loginStatus$ = this.loginStatusSubject.asObservable();
   userRole$ = this.userRoleSubject.asObservable();
+  username$ = this.usernameSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   private login(email: string, password: string, microservice: MICROSERVICE_NAME, expectedRole: USER_ROLE): Observable<LoginResponse> {
     const loginRequest: LoginRequest = { email, password };
-    const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'login');
+    const endpoint = GetAPIEndpoint(microservice, 'base') + '/login';
 
     return this.http.post<LoginResponse>(endpoint, loginRequest)
       .pipe(
@@ -55,6 +58,22 @@ export class AuthService {
     return this.login(email, password, MICROSERVICE_NAME.SELLER, USER_ROLE.ROLE_SELLER);
   }
 
+  doctorLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.USER, USER_ROLE.ROLE_DOCTOR);
+  }
+
+  raiderLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.USER, USER_ROLE.ROLE_RAIDER);
+  }
+
+  deliveryBoyLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.USER, USER_ROLE.ROLE_DELIVERY_BOY);
+  }
+
+  customerCareLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.USER, USER_ROLE.ROLE_CUSTOMER_CARE);
+  }
+
   // Handle login response and store tokens
   private handleLoginResponse(response: LoginResponse, expectedRole: string): void {
     if (response?.jwt && response?.refreshToken) {
@@ -62,18 +81,20 @@ export class AuthService {
       
       const decodedToken = this.jwtHelper.decodeToken<TokenPayload>(response.jwt);
       const actualRole = decodedToken?.role || '';
+      const email = decodedToken?.email || '';
       
       if (actualRole && actualRole.toUpperCase() === expectedRole.toUpperCase()) {
         this.saveUserRole(actualRole);
+        this.saveUsername(email);
         this.loginStatusSubject.next(true);
       } else {
         console.error('Role mismatch in token:', actualRole, 'expected:', expectedRole);
-        this.logout();
+        this.clearSession();
         throw new Error('Role mismatch in token');
       }
     } else {
       console.error('Invalid login response format');
-      this.logout();
+      this.clearSession();
       throw new Error('Invalid login response format');
     }
   }
@@ -164,24 +185,65 @@ export class AuthService {
     if (token) {
       const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'logout');
       return this.http.post<void>(endpoint, {}).pipe(
-        tap(() => this.clearSession()),
+        tap(() => {
+          this.clearSession();
+          // Force reload to ensure all components update
+          window.location.href = '/login';
+        }),
         catchError(error => {
           this.clearSession();
+          // Force reload even on error
+          window.location.href = '/login';
           return throwError(() => error);
         })
       );
     }
     
     this.clearSession();
+    // Force reload if no token
+    window.location.href = '/login';
     return of(void 0);
   }
 
   // Clear session data
   private clearSession(): void {
+    // Clear all session storage
+    sessionStorage.clear();
+    
+    // Also explicitly remove our specific keys
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
     sessionStorage.removeItem(REFRESH_TOKEN_KEY);
     sessionStorage.removeItem(USER_ROLE_KEY);
+    sessionStorage.removeItem(USERNAME_KEY);
+    
+    // Update behavior subjects
     this.loginStatusSubject.next(false);
     this.userRoleSubject.next(USER_ROLE.GUEST);
+    this.usernameSubject.next('');
+  }
+
+  // Get stored username
+  getStoredUsername(): string {
+    return sessionStorage.getItem(USERNAME_KEY) || '';
+  }
+
+  // Save username
+  saveUsername(username: string): void {
+    sessionStorage.setItem(USERNAME_KEY, username);
+    this.usernameSubject.next(username);
+  }
+
+  // Get username from token
+  getUsername(): string {
+    const token = this.getToken();
+    if (!token) return '';
+
+    try {
+      const decodedToken = this.jwtHelper.decodeToken<TokenPayload>(token);
+      return decodedToken?.email || '';
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return '';
+    }
   }
 }

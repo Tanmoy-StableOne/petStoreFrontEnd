@@ -1,3 +1,6 @@
+<!-- Loader -->
+<app-loader [isLoading]="(isLoading$ | async) ?? false"></app-loader>
+
 <!-- Top Navbar for guests -->
 <div *ngIf="!useSideNavbar">
   <app-navbar></app-navbar>

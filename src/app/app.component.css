@@ -7,14 +7,15 @@ main {
 }
 
 main.with-side-navbar {
-  padding-top: 0;
-  margin-left: 250px;
-  min-height: 100vh;
+  padding-top: 60px;
+  margin-left: 280px;
+  min-height: calc(100vh - 60px);
+  transition: margin-left 0.3s;
 }
 
 @media (max-width: 768px) {
   main.with-side-navbar {
-    margin-left: 70px;
+    margin-left: 60px;
   }
 }
 

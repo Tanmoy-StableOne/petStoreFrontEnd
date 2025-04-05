@@ -1,7 +1,10 @@
 <aside class="side-navbar" [class.expanded]="isExpanded">
   <div class="side-navbar-header">
     <div class="brand">
-      <a routerLink="/home">PetStore</a>
+      <a routerLink="/home">
+        <img src="https://img.icons8.com/color/48/000000/dog.png" alt="Pet Store Logo" class="brand-logo">
+        <span class="brand-text">PetStore</span>
+      </a>
     </div>
     <button class="toggle-btn" (click)="toggleExpand()">
       <span class="toggle-icon"></span>

@@ -1,23 +1,23 @@
 .side-navbar {
   position: fixed;
-  top: 0;
+  top: 60px;
   left: 0;
-  height: 100vh;
-  width: 250px;
-  background-color: #2c3e50;
-  color: #ecf0f1;
+  height: calc(100vh - 60px);
+  width: 280px;
+  background-color: var(--primary-color);
+  color: var(--text-light);
   transition: width 0.3s;
-  z-index: 1000;
+  z-index: 999;
   display: flex;
   flex-direction: column;
 }
 
 .side-navbar.expanded {
-  width: 250px;
+  width: 280px;
 }
 
 .side-navbar:not(.expanded) {
-  width: 70px;
+  width: 60px;
 }
 
 .side-navbar:not(.expanded) .menu-text,
@@ -33,14 +33,32 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #34495e;
+  border-bottom: 1px solid var(--primary-light);
 }
 
 .brand a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ecf0f1;
+  color: var(--text-light);
   text-decoration: none;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.side-navbar:not(.expanded) .brand-text {
+  display: none;
+}
+
+.side-navbar:not(.expanded) .brand-logo {
+  width: 24px;
+  height: 24px;
 }
 
 .toggle-btn {
@@ -88,7 +106,7 @@
 }
 
 .menu-link:hover, .submenu-link:hover {
-  background-color: #34495e;
+  background-color: var(--primary-light);
 }
 
 .menu-icon {
@@ -118,7 +136,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
-  background-color: #34495e;
+  background-color: var(--primary-light);
 }
 
 .has-submenu:hover .submenu {
@@ -188,32 +206,32 @@
 }
 
 .logout-btn {
-  background-color: #e74c3c;
+  background-color: var(--accent-color);
   border: none;
-  color: white;
+  color: var(--text-light);
 }
 
 .logout-btn:hover {
-  background-color: #c0392b;
+  background-color: var(--accent-dark);
 }
 
 .login-btn {
-  background-color: #3498db;
-  color: white;
+  background-color: var(--secondary-color);
+  color: var(--text-light);
 }
 
 .login-btn:hover {
-  background-color: #2980b9;
+  background-color: var(--secondary-dark);
 }
 
 /* Responsive styles */
 @media (max-width: 768px) {
   .side-navbar {
-    width: 70px;
+    width: 60px;
   }
   
   .side-navbar.expanded {
-    width: 250px;
+    width: 280px;
   }
 }
 

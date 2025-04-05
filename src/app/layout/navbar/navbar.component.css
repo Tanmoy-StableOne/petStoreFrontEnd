@@ -27,10 +27,19 @@
 }
 
 .navbar-brand a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
+  color: var(--text-dark);
   text-decoration: none;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 .hamburger-menu {
@@ -131,6 +140,11 @@
 @media (max-width: 768px) {
   .dropdown-icon.active {
     transform: rotate(-135deg);
+  }
+
+  .brand-logo {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -325,10 +339,9 @@
   }
 }
 
-/* Add margin to the main content to account for fixed navbar */
 :host {
   display: block;
-  margin-bottom: 60px; /* Adjust this value based on your navbar height */
+  margin-bottom: 10px; /* Adjust this value based on your navbar height */
 }
 
 .profile-btn {

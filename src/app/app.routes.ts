@@ -36,6 +36,7 @@ import { CustomerLoginComponent } from './login/customer-login/customer-login.co
 import { MasterLoginComponent } from './login/master-login/master-login.component';
 import { AuthGuard } from './login/guards/auth.guard';
 import { USER_ROLE } from './constants/Enums';
+import { MyProfileComponent } from './components/my-profile/my-profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -155,6 +156,13 @@ export const routes: Routes = [
       { path: 'control-panel', component: ControllS3Component },
       { path: 'view', component: ViewS3Component }
     ]
+  },
+
+  {
+    path: 'my-profile',
+    component: MyProfileComponent,
+    canActivate: [AuthGuard],
+    data: { roles: Object.values(USER_ROLE).filter(role => role !== USER_ROLE.GUEST) }
   },
 
   // Catch-all route must be at the end

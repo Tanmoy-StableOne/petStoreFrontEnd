@@ -95,7 +95,7 @@ export class AuthService {
   }
 
   // Save both tokens
-  private saveTokens(accessToken: string, refreshToken: string): void {
+  saveTokens(accessToken: string, refreshToken: string): void {
     sessionStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
     sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
@@ -120,7 +120,7 @@ export class AuthService {
   }
 
   // Save user role
-  private saveUserRole(role: string): void {
+  saveUserRole(role: string): void {
     sessionStorage.setItem(USER_ROLE_KEY, role);
     this.userRoleSubject.next(role);
   }

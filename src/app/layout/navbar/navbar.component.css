@@ -77,7 +77,7 @@
   margin: 0 0.5rem;
 }
 
-.nav-link, .submenu-link {
+.nav-link {
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
@@ -88,7 +88,7 @@
   cursor: pointer;
 }
 
-.nav-link:hover, .submenu-link:hover {
+.nav-link:hover {
   color: #007bff;
 }
 
@@ -113,51 +113,51 @@
   transform: rotate(-135deg);
 }
 
-.submenu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  min-width: 200px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  z-index: 1001;
-  list-style: none;
-  padding: 0.5rem 0;
-  margin: 0;
-}
-
+/* Desktop submenu styles */
 @media (min-width: 769px) {
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+  }
+
   .has-submenu:hover .submenu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
-}
 
-.submenu-item {
-  padding: 0;
-  margin: 0;
-}
+  .submenu-item {
+    margin: 0;
+    padding: 0;
+  }
 
-.submenu-link {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  color: #333;
-  text-decoration: none;
-  transition: all 0.3s;
-  white-space: nowrap;
-  width: 100%;
-}
+  .submenu-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
 
-.submenu-link:hover {
-  background-color: #f8f9fa;
-  color: #007bff;
+  .submenu-link:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+  }
 }
 
 .navbar-end {
@@ -245,28 +245,35 @@
     justify-content: space-between;
   }
 
+  /* Mobile submenu styles */
   .submenu {
-    position: static;
-    box-shadow: none;
-    opacity: 0;
-    visibility: hidden;
-    transform: none;
-    height: 0;
-    padding: 0;
+    display: none;
     background-color: #f8f9fa;
-    transition: all 0.3s ease;
-    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    list-style: none;
   }
 
   .submenu.active {
-    opacity: 1;
-    visibility: visible;
-    height: auto;
-    padding: 0.5rem 0;
+    display: block;
+  }
+
+  .submenu-item {
+    margin: 0;
+    padding: 0;
   }
 
   .submenu-link {
-    padding: 0.75rem 1rem 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .submenu-link:hover {
+    color: #007bff;
   }
 
   .desktop-auth {

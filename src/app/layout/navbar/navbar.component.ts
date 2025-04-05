@@ -62,7 +62,19 @@ export class NavbarComponent implements OnInit {
   toggleSubmenu(event: Event, itemId: string): void {
     event.preventDefault();
     event.stopPropagation();
-    this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
+    
+    // For mobile view
+    if (window.innerWidth <= 768) {
+      this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
+    }
+    // For desktop view with click navigation
+    else if (!this.hasSubmenuOpen()) {
+      this.activeSubmenuId = itemId;
+    }
+  }
+
+  hasSubmenuOpen(): boolean {
+    return this.activeSubmenuId !== null;
   }
 
   isSubmenuActive(itemId: string): boolean {

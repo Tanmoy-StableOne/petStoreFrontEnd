@@ -5,7 +5,8 @@ import { AuthService } from './Auth.Service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomAlertComponent } from '../../common-component/custom-alert/custom-alert.component';
-
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,31 +17,59 @@ export class AuthGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     console.log('AuthGuard activated for:', state.url);
     const token = this.authService.getToken();
 
-    if (!token || this.jwtHelper.isTokenExpired(token)) {
-      this.openDialog("Login", "Token expired or not found. Redirecting to login", RESPONSE_TYPE_COLOR.ERROR, 'login');
+    // If no token, redirect to login
+    if (!token) {
+      this.openDialog("Login", "Authentication required. Redirecting to login", RESPONSE_TYPE_COLOR.ERROR, 'login');
       return false;
     }
 
+    // Check if token is expired
+    if (this.jwtHelper.isTokenExpired(token)) {
+      // Try to refresh the token
+      return this.authService.refreshAccessToken().pipe(
+        map(() => this.checkRoleAccess(route)),
+        catchError(error => {
+          console.error('Token refresh failed:', error);
+          this.openDialog("Login", "Session expired. Please login again", RESPONSE_TYPE_COLOR.ERROR, 'login');
+          return of(false);
+        })
+      );
+    }
+
+    // Token is valid, check role access
+    return this.checkRoleAccess(route);
+  }
+
+  private checkRoleAccess(route: ActivatedRouteSnapshot): boolean {
     try {
+      const token = this.authService.getToken();
+      if (!token) {
+        return false;
+      }
+      
       const decodedToken = this.jwtHelper.decodeToken(token);
       console.log('Decoded Token:', decodedToken);
 
       const requiredRole = route.data['role'];
       console.log('Required Role:', requiredRole);
-      console.log('Token User Role:', decodedToken?.user_role);
+      
+      // Get role from token or from stored role
+      const userRole = decodedToken?.role || this.authService.getStoredUserRole();
+      console.log('User Role:', userRole);
 
-      if (requiredRole && decodedToken?.user_role?.toUpperCase() !== requiredRole.toUpperCase()) {
-        this.openDialog("Login", "Role mismatch", RESPONSE_TYPE_COLOR.ERROR, "un-authorized");
+      if (requiredRole && userRole?.toUpperCase() !== requiredRole.toUpperCase()) {
+        this.openDialog("Access Denied", "You don't have permission to access this resource", RESPONSE_TYPE_COLOR.ERROR, "un-authorized");
         return false;
       }
 
       return true;
     } catch (error) {
-      this.openDialog("Login", "Error decoding token", RESPONSE_TYPE_COLOR.ERROR, "login");
+      console.error('Error checking role access:', error);
+      this.openDialog("Error", "Error verifying authentication", RESPONSE_TYPE_COLOR.ERROR, "login");
       return false;
     }
   }

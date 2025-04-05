@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { GetBaseURL } from '../../constants/endpoints';
+import { GetAPIEndpoint } from '../../constants/endpoints';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
 import { USER_ROLE, MICROSERVICE_NAME } from '../../constants/Enums';
 import { catchError, map, tap } from 'rxjs/operators';
+import { LoginResponse, LoginRequest, RefreshTokenRequest, TokenPayload } from '../../interfaces/auth.interface';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
@@ -24,57 +25,42 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  masterLogin(email: string, password: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.AUTHENTICATION), { email, password })
+  private login(email: string, password: string, microservice: MICROSERVICE_NAME, expectedRole: USER_ROLE): Observable<LoginResponse> {
+    const loginRequest: LoginRequest = { email, password };
+    const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'login');
+
+    return this.http.post<LoginResponse>(endpoint, loginRequest)
       .pipe(
-        tap(response => this.handleLoginResponse(response, USER_ROLE.ROLE_MASTER)),
+        tap(response => this.handleLoginResponse(response, expectedRole)),
         catchError(error => {
-          console.error('Master login error:', error);
+          console.error(`${expectedRole} login error:`, error);
           return throwError(() => error);
         })
       );
   }
 
-  adminLogin(email: string, password: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.ADMIN), { email, password })
-      .pipe(
-        tap(response => this.handleLoginResponse(response, USER_ROLE.ROLE_ADMIN)),
-        catchError(error => {
-          console.error('Admin login error:', error);
-          return throwError(() => error);
-        })
-      );
+  masterLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.AUTHENTICATION, USER_ROLE.ROLE_MASTER);
   }
 
-  userLogin(email: string, password: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.USER), { email, password })
-      .pipe(
-        tap(response => this.handleLoginResponse(response, USER_ROLE.ROLE_CUSTOMER)),
-        catchError(error => {
-          console.error('User login error:', error);
-          return throwError(() => error);
-        })
-      );
+  adminLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.ADMIN, USER_ROLE.ROLE_ADMIN);
   }
 
-  sellerLogin(email: string, password: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.SELLER), { email, password })
-      .pipe(
-        tap(response => this.handleLoginResponse(response, USER_ROLE.ROLE_SELLER)),
-        catchError(error => {
-          console.error('Seller login error:', error);
-          return throwError(() => error);
-        })
-      );
+  userLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.USER, USER_ROLE.ROLE_CUSTOMER);
+  }
+
+  sellerLogin(email: string, password: string): Observable<LoginResponse> {
+    return this.login(email, password, MICROSERVICE_NAME.SELLER, USER_ROLE.ROLE_SELLER);
   }
 
   // Handle login response and store tokens
-  private handleLoginResponse(response: any, expectedRole: string): void {
-    if (response && response.jwt && response.refreshToken) {
+  private handleLoginResponse(response: LoginResponse, expectedRole: string): void {
+    if (response?.jwt && response?.refreshToken) {
       this.saveTokens(response.jwt, response.refreshToken);
       
-      // Verify the role matches what we expect
-      const decodedToken = this.jwtHelper.decodeToken(response.jwt);
+      const decodedToken = this.jwtHelper.decodeToken<TokenPayload>(response.jwt);
       const actualRole = decodedToken?.role || '';
       
       if (actualRole && actualRole.toUpperCase() === expectedRole.toUpperCase()) {
@@ -83,10 +69,12 @@ export class AuthService {
       } else {
         console.error('Role mismatch in token:', actualRole, 'expected:', expectedRole);
         this.logout();
+        throw new Error('Role mismatch in token');
       }
     } else {
       console.error('Invalid login response format');
       this.logout();
+      throw new Error('Invalid login response format');
     }
   }
 
@@ -107,7 +95,7 @@ export class AuthService {
   }
 
   // Save both tokens
-  saveTokens(accessToken: string, refreshToken: string): void {
+  private saveTokens(accessToken: string, refreshToken: string): void {
     sessionStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
     sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
@@ -118,7 +106,7 @@ export class AuthService {
     if (!token) return USER_ROLE.GUEST;
 
     try {
-      const decodedToken = this.jwtHelper.decodeToken(token);
+      const decodedToken = this.jwtHelper.decodeToken<TokenPayload>(token);
       return decodedToken?.role || USER_ROLE.GUEST;
     } catch (error) {
       console.error('Error decoding token:', error);
@@ -132,31 +120,34 @@ export class AuthService {
   }
 
   // Save user role
-  saveUserRole(role: string): void {
+  private saveUserRole(role: string): void {
     sessionStorage.setItem(USER_ROLE_KEY, role);
     this.userRoleSubject.next(role);
   }
 
   // Check if user is logged in
   isUserLoggedIn(): boolean {
-    return !!this.getToken() && !!this.getRefreshToken();
+    return this.isAuthenticated();
   }
 
   // Refresh token
-  refreshAccessToken(): Observable<any> {
+  refreshAccessToken(): Observable<LoginResponse> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.AUTHENTICATION) + 'refresh', { refreshToken })
+    const refreshRequest: RefreshTokenRequest = { refreshToken };
+    const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'refresh');
+
+    return this.http.post<LoginResponse>(endpoint, refreshRequest)
       .pipe(
-        tap((response: any) => {
-          if (response && response.jwt) {
+        tap(response => {
+          if (response?.jwt) {
             // Keep the same refresh token, just update the access token
             this.saveTokens(response.jwt, refreshToken);
           } else {
-            this.logout();
+            throw new Error('Invalid refresh token response');
           }
         }),
         catchError(error => {
@@ -168,7 +159,25 @@ export class AuthService {
   }
 
   // Logout
-  logout(): void {
+  logout(): Observable<void> {
+    const token = this.getToken();
+    if (token) {
+      const endpoint = GetAPIEndpoint(MICROSERVICE_NAME.AUTHENTICATION, 'logout');
+      return this.http.post<void>(endpoint, {}).pipe(
+        tap(() => this.clearSession()),
+        catchError(error => {
+          this.clearSession();
+          return throwError(() => error);
+        })
+      );
+    }
+    
+    this.clearSession();
+    return of(void 0);
+  }
+
+  // Clear session data
+  private clearSession(): void {
     sessionStorage.removeItem(ACCESS_TOKEN_KEY);
     sessionStorage.removeItem(REFRESH_TOKEN_KEY);
     sessionStorage.removeItem(USER_ROLE_KEY);

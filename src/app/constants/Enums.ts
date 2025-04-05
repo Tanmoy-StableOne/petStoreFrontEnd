@@ -30,30 +30,17 @@ export const INFO_LOG_TYPE = {
   SEEDING: 'SEEDING'
 }
 
-export const MICROSERVICE_NAME_FOR_PORT = {
-  ADMIN: 8080,
-  AUTHENTICATION: 8081,
-  CHAT: 8082,
-  CORE: 8083,
-  LIVENESS: 8084,
-  PAYMENT: 8085,
-  S3: 8086,
-  SANCTION: 8087,
-  SELLER: 8088,
-  USER: 8089
-}
-
-export const MICROSERVICE_NAME = {
-  ADMIN: "admin",
-  AUTHENTICATION: "authentication",
-  CHAT: "chat",
-  CORE: "core",
-  LIVENESS: "liveness",
-  PAYMENT: "payment",
-  S3: "s3",
-  SANCTION: "sanction",
-  SELLER: "seller",
-  USER: "user"
+export enum MICROSERVICE_NAME {
+  ADMIN = "admin",
+  AUTHENTICATION = "authentication",
+  CHAT = "chat",
+  CORE = "core",
+  LIVENESS = "liveness",
+  PAYMENT = "payment",
+  S3 = "s3",
+  SANCTION = "sanction",
+  SELLER = "seller",
+  USER = "user"
 }
 
 export const RESPONSE_TYPE = {
@@ -112,5 +99,3 @@ export const VERIFICATION_TYPE_STATUS_FOR_SANCTION = {
   SANCTION_NOT_VERIFIED: 'SANCTION_NOT_VERIFIED',
   SANCTION_PENDING: 'SANCTION_PENDING',
 }
-
-

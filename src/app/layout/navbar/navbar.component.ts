@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuService } from '../../service/menu/menu.service';
@@ -18,6 +18,25 @@ export class NavbarComponent implements OnInit {
   userRole = '';
   isMobileMenuOpen = false;
   activeSubmenuId: string | null = null;
+  isMobileView = window.innerWidth <= 768;
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobileView = window.innerWidth <= 768;
+    if (!this.isMobileView) {
+      this.isMobileMenuOpen = false;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.isMobileView) {
+      const clickedElement = event.target as HTMLElement;
+      if (!clickedElement.closest('.has-submenu')) {
+        this.activeSubmenuId = null;
+      }
+    }
+  }
 
   constructor(
     private menuService: MenuService,
@@ -63,22 +82,21 @@ export class NavbarComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     
-    // For mobile view
-    if (window.innerWidth <= 768) {
+    if (this.isMobileView) {
+      // For mobile: toggle submenu
+      this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
+    } else {
+      // For desktop: show on click, hide when clicking outside
       this.activeSubmenuId = this.activeSubmenuId === itemId ? null : itemId;
     }
-    // For desktop view with click navigation
-    else if (!this.hasSubmenuOpen()) {
-      this.activeSubmenuId = itemId;
-    }
-  }
-
-  hasSubmenuOpen(): boolean {
-    return this.activeSubmenuId !== null;
   }
 
   isSubmenuActive(itemId: string): boolean {
-    return this.activeSubmenuId === itemId;
+    if (this.isMobileView) {
+      return this.activeSubmenuId === itemId;
+    } else {
+      return this.activeSubmenuId === itemId;
+    }
   }
 
   closeMenu(): void {

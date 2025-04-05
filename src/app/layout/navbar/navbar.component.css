@@ -109,12 +109,17 @@
   transition: transform 0.3s ease;
 }
 
-.dropdown-icon.active {
+.dropdown-icon.active,
+.has-submenu:hover .dropdown-icon {
   transform: rotate(-135deg);
 }
 
 /* Desktop submenu styles */
 @media (min-width: 769px) {
+  .has-submenu {
+    position: relative;
+  }
+
   .submenu {
     position: absolute;
     top: 100%;
@@ -123,20 +128,16 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     min-width: 200px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-    z-index: 1001;
+    display: none;
     list-style: none;
     padding: 0.5rem 0;
     margin: 0;
+    z-index: 1001;
   }
 
-  .has-submenu:hover .submenu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+  .has-submenu:hover .submenu,
+  .submenu.active {
+    display: block;
   }
 
   .submenu-item {
@@ -147,11 +148,12 @@
   .submenu-link {
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     color: #333;
     text-decoration: none;
     transition: all 0.3s;
     white-space: nowrap;
+    width: 100%;
   }
 
   .submenu-link:hover {

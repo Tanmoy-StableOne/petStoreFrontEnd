@@ -23,43 +23,53 @@ const PORT_MAPPING: Record<MICROSERVICE_NAME, number> = {
 // Define all API endpoints
 export const Endpoints: APIEndpoints = {
   [MICROSERVICE_NAME.CORE]: {
+    base: "core",
     getNavbar: "navbar/get",
     getProducts: "products/all"
   },
   [MICROSERVICE_NAME.AUTHENTICATION]: {
+    base: "auth",
     login: "auth/login",
     register: "auth/register",
     logout: "auth/logout",
     refresh: "auth/refresh"
   },
   [MICROSERVICE_NAME.USER]: {
+    base: "user",
     getProfile: "user/profile",
     updateProfile: "user/update"
   },
   [MICROSERVICE_NAME.ADMIN]: {
+    base: "admin",
     getDashboard: "admin/dashboard",
     getUsers: "admin/users"
   },
   [MICROSERVICE_NAME.CHAT]: {
+    base: "chat",
     getMessages: "chat/messages",
     sendMessage: "chat/send"
   },
   [MICROSERVICE_NAME.PAYMENT]: {
+    base: "payment",
     createPayment: "payment/create",
     getPaymentStatus: "payment/status"
   },
   [MICROSERVICE_NAME.S3]: {
+    base: "s3",
     uploadFile: "s3/upload",
     getFile: "s3/get"
   },
   [MICROSERVICE_NAME.SANCTION]: {
+    base: "sanction",
     checkStatus: "sanction/check"
   },
   [MICROSERVICE_NAME.SELLER]: {
+    base: "seller",
     getProducts: "seller/products",
     addProduct: "seller/product/add"
   },
   [MICROSERVICE_NAME.LIVENESS]: {
+    base: "liveness",
     healthCheck: "health"
   }
 };

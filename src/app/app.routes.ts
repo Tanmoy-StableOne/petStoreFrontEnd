@@ -28,7 +28,14 @@ import { SellerDashboardComponent } from './seller/seller-dashboard/seller-dashb
 import { RegisterSellerComponent } from './seller/register-seller/register-seller.component';
 import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.component';
 import { RegisterUserComponent } from './user/register-user/register-user.component';
-
+import { LoginSelectionComponent } from './login/login-selection/login-selection.component';
+import { AdminLoginComponent } from './login/admin-login/admin-login.component';
+import { DoctorLoginComponent } from './login/doctor-login/doctor-login.component';
+import { SellerLoginComponent } from './login/seller-login/seller-login.component';
+import { CustomerLoginComponent } from './login/customer-login/customer-login.component';
+import { MasterLoginComponent } from './login/master-login/master-login.component';
+import { AuthGuard } from './login/guards/auth.guard';
+import { USER_ROLE } from './constants/Enums';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -40,48 +47,116 @@ export const routes: Routes = [
 
   //error routes
   { path: 'un-authorized', component: UnAuthorizeComponent },
-  { path: '**', component: ErrorPageComponent },
 
-  //for master specific routes
-  { path: 'master-dashboard', component: MasterDashboardComponent },
-  { path: 'master/admin-profile-control', component: ProfileControlForAdminComponent },
-  { path: 'master/view-admins', component: ViewAdminsComponent },
-  { path: 'master/doctor-profile-control', component: ProfileControlForDoctorsComponent },
-  { path: 'master/view-doctors', component: ViewDoctorsComponent },
-  { path: 'master/seller-profile-control', component: ProfileControlForSellerComponent },
-  { path: 'master/view-seller', component: ViewSellerComponent },
-  { path: 'master/user-profile-control', component: ProfileControlForUserComponent },
-  { path: 'master/view-user', component: ViewUsersComponent },
+  // Login routes
+  {
+    path: 'login',
+    children: [
+      { path: '', component: LoginSelectionComponent },
+      { path: 'customer-login', component: CustomerLoginComponent },
+      { path: 'admin-login', component: AdminLoginComponent },
+      { path: 'doctor-login', component: DoctorLoginComponent },
+      { path: 'seller-login', component: SellerLoginComponent },
+      { path: 'master-login', component: MasterLoginComponent }
+    ]
+  },
 
-  //for admin specific routes
-  { path: 'admin-dashboard', component: AdminDashboardComponent },
+  // Master routes (protected)
+  {
+    path: 'master',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_MASTER] },
+    children: [
+      { path: 'dashboard', component: MasterDashboardComponent },
+      { path: 'admin-profile-control', component: ProfileControlForAdminComponent },
+      { path: 'view-admins', component: ViewAdminsComponent },
+      { path: 'doctor-profile-control', component: ProfileControlForDoctorsComponent },
+      { path: 'view-doctors', component: ViewDoctorsComponent },
+      { path: 'seller-profile-control', component: ProfileControlForSellerComponent },
+      { path: 'view-seller', component: ViewSellerComponent },
+      { path: 'user-profile-control', component: ProfileControlForUserComponent },
+      { path: 'view-user', component: ViewUsersComponent }
+    ]
+  },
 
-  //for doctor specific routes
-  { path: 'doctor-dashboard', component: DoctorDashboardComponent },
-  { path: 'register-doctor', component: RegisterDoctorComponent },
+  // Admin routes (protected)
+  {
+    path: 'admin',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_ADMIN] },
+    children: [
+      { path: 'dashboard', component: AdminDashboardComponent }
+    ]
+  },
 
-  //for liveness specific routes
-  { path: 'liveness-actions', component: LivenessActionsComponent },
-  { path: 'liveness-profile-view', component: LivenessProfileViewComponent },
-  { path: 'liveness-view', component: ViewLivenessComponent },
+  // Doctor routes (protected)
+  {
+    path: 'doctor',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_DOCTOR] },
+    children: [
+      { path: 'dashboard', component: DoctorDashboardComponent },
+      { path: 'register', component: RegisterDoctorComponent }
+    ]
+  },
 
-  //for seller specific routes
-  { path: 'seller-dashboard', component: SellerDashboardComponent },
-  { path: 'register-seller', component: RegisterSellerComponent},
+  // Liveness routes (protected)
+  {
+    path: 'liveness',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_MASTER, USER_ROLE.ROLE_ADMIN] },
+    children: [
+      { path: 'actions', component: LivenessActionsComponent },
+      { path: 'profile-view', component: LivenessProfileViewComponent },
+      { path: 'view', component: ViewLivenessComponent }
+    ]
+  },
 
-  //user specific routes
-  { path: 'user-dashboard', component: UserDashboardComponent },
-  { path: 'register-user', component: RegisterUserComponent},
+  // Seller routes (protected)
+  {
+    path: 'seller',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_SELLER] },
+    children: [
+      { path: 'dashboard', component: SellerDashboardComponent },
+      { path: 'register', component: RegisterSellerComponent }
+    ]
+  },
 
-  //for sanction specific routes
-  { path: 'sanction-actions', component: SanctionActionsComponent },
-  { path: 'sanction-profile-view', component: SanctionProfileViewComponent },
-  { path: 'sanction-view', component: ViewSanctionComponent },
+  // Customer routes (protected)
+  {
+    path: 'customer',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_CUSTOMER] },
+    children: [
+      { path: 'dashboard', component: UserDashboardComponent },
+      { path: 'register', component: RegisterUserComponent }
+    ]
+  },
 
-  //s3 specific routes
-  { path: 's3-control-pannel', component: ControllS3Component },
-  { path: 's3-view', component: ViewS3Component },
+  // Sanction routes (protected)
+  {
+    path: 'sanction',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_MASTER, USER_ROLE.ROLE_ADMIN] },
+    children: [
+      { path: 'actions', component: SanctionActionsComponent },
+      { path: 'profile-view', component: SanctionProfileViewComponent },
+      { path: 'view', component: ViewSanctionComponent }
+    ]
+  },
 
+  // S3 routes (protected)
+  {
+    path: 's3',
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ROLE_MASTER, USER_ROLE.ROLE_ADMIN] },
+    children: [
+      { path: 'control-panel', component: ControllS3Component },
+      { path: 'view', component: ViewS3Component }
+    ]
+  },
 
-
+  // Catch-all route must be at the end
+  { path: '**', component: ErrorPageComponent }
 ];

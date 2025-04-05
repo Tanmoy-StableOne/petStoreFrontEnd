@@ -31,16 +31,16 @@ export enum INFO_LOG_TYPE {
 }
 
 export enum MICROSERVICE_NAME {
-  ADMIN = "admin",
-  AUTHENTICATION = "authentication",
-  CHAT = "chat",
-  CORE = "core",
-  LIVENESS = "liveness",
-  PAYMENT = "payment",
-  S3 = "s3",
-  SANCTION = "sanction",
-  SELLER = "seller",
-  USER = "user"
+  ADMIN = 'ADMIN',
+  AUTHENTICATION = 'AUTHENTICATION',
+  CHAT = 'CHAT',
+  CORE = 'CORE',
+  LIVENESS = 'LIVENESS',
+  PAYMENT = 'PAYMENT',
+  S3 = 'S3',
+  SANCTION = 'SANCTION',
+  SELLER = 'SELLER',
+  USER = 'USER'
 }
 
 export enum RESPONSE_TYPE {

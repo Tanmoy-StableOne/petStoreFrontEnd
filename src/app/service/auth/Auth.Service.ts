@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GetBaseURL, MicroServiceEndpointType } from '../../constants/endpoints';
+import { GetBaseURL } from '../../constants/endpoints';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject } from 'rxjs';
 import { USER_ROLE, MICROSERVICE_NAME } from '../../constants/Enums';
@@ -18,19 +18,19 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   masterLogin(email: string, password: string, userType: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.AUTHENTICATION as keyof typeof MicroServiceEndpointType), { email, password });
+    return this.http.post(GetBaseURL(MICROSERVICE_NAME.AUTHENTICATION), { email, password });
   }
 
   adminLogin(email: string, password: string, userType: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.ADMIN as keyof typeof MicroServiceEndpointType), { email, password });
+    return this.http.post(GetBaseURL(MICROSERVICE_NAME.ADMIN), { email, password });
   }
 
   userLogin(email: string, password: string, userType: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.USER as keyof typeof MicroServiceEndpointType), { email, password });
+    return this.http.post(GetBaseURL(MICROSERVICE_NAME.USER), { email, password });
   }
 
   sellerLogin(email: string, password: string, userType: string): Observable<any> {
-    return this.http.post(GetBaseURL(MICROSERVICE_NAME.SELLER as keyof typeof MicroServiceEndpointType), { email, password });
+    return this.http.post(GetBaseURL(MICROSERVICE_NAME.SELLER), { email, password });
   }
 
   getToken(): string | null {

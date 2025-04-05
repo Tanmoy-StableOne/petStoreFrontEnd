@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuService } from '../../service/menu/menu.service';
@@ -11,19 +11,24 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './side-navbar.component.html',
-  styleUrl: './side-navbar.component.css'
+  styleUrls: ['./side-navbar.component.css']
 })
 export class SideNavbarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
   isLoggedIn = false;
   userRole = '';
-  isExpanded = false;
+  isExpanded = true;
   private subscriptions: Subscription[] = [];
+
+  @Output() sidebarCollapsed = new EventEmitter<boolean>();
 
   constructor(
     private menuService: MenuService,
     private authService: AuthService
-  ) { }
+  ) {
+    // Emit initial state
+    this.sidebarCollapsed.emit(!this.isExpanded);
+  }
 
   ngOnInit(): void {
     console.log('SideNavbar: Initializing component');
@@ -62,6 +67,7 @@ export class SideNavbarComponent implements OnInit, OnDestroy {
   toggleExpand(): void {
     console.log('SideNavbar: Toggling expand state');
     this.isExpanded = !this.isExpanded;
+    this.sidebarCollapsed.emit(!this.isExpanded);
   }
 
   logout(): void {

@@ -8,11 +8,11 @@
 
 <!-- Side Navbar for logged-in users -->
 <div *ngIf="useSideNavbar">
-  <app-side-navbar></app-side-navbar>
+  <app-side-navbar (sidebarCollapsed)="onSidebarCollapsed($event)"></app-side-navbar>
 </div>
 
 <!-- Main content -->
-<main [class.with-side-navbar]="useSideNavbar">
+<main [class.with-side-navbar]="useSideNavbar" [class.collapsed]="isSidebarCollapsed">
   <router-outlet></router-outlet>
 </main>
 

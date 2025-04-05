@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   useSideNavbar = false;
   isLoggedIn = false;
   isLoading$: Observable<boolean>;
+  isSidebarCollapsed = false;
 
   constructor(
     private router: Router,
@@ -67,5 +68,9 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.loaderService.hide();
     }, 500);
+  }
+
+  onSidebarCollapsed(collapsed: boolean) {
+    this.isSidebarCollapsed = collapsed;
   }
 }

@@ -20,12 +20,26 @@
   width: 60px;
 }
 
+/* Hide elements when not expanded */
 .side-navbar:not(.expanded) .menu-text,
-.side-navbar:not(.expanded) .brand a,
+.side-navbar:not(.expanded) .brand-text,
+.side-navbar:not(.expanded) .brand-logo,
 .side-navbar:not(.expanded) .user-role,
 .side-navbar:not(.expanded) .logout-text,
-.side-navbar:not(.expanded) .login-text {
+.side-navbar:not(.expanded) .login-text,
+.side-navbar:not(.expanded) .dropdown-arrow {
   display: none;
+}
+
+/* Show elements when expanded */
+.side-navbar.expanded .menu-text,
+.side-navbar.expanded .brand-text,
+.side-navbar.expanded .brand-logo,
+.side-navbar.expanded .user-role,
+.side-navbar.expanded .logout-text,
+.side-navbar.expanded .login-text,
+.side-navbar.expanded .dropdown-arrow {
+  display: block;
 }
 
 .side-navbar-header {
@@ -94,7 +108,6 @@
 
 .menu-item {
   position: relative;
-  width: 100%;
 }
 
 .menu-link {
@@ -107,6 +120,7 @@
   position: relative;
   width: 100%;
   min-height: 45px;
+  gap: 0.5rem;
 }
 
 .menu-link:hover, .submenu-link:hover {
@@ -116,38 +130,42 @@
 .menu-icon {
   width: 20px;
   height: 20px;
-  margin-right: 1rem;
+  min-width: 20px;
   filter: brightness(0) invert(1);
 }
 
 .menu-text {
+  flex: 1;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 0;
 }
 
 .dropdown-arrow {
-  margin-left: auto;
-  font-size: 0.8rem;
+  margin-left: 0;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.3s;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  position: relative;
+  color: var(--text-light);
+  padding-right: 4px;
 }
 
 .dropdown-arrow::after {
-  content: '›';
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.2rem;
-  color: var(--text-light);
+  content: '❯';
+  font-size: 10px;
+  line-height: 1;
+  transition: transform 0.3s;
 }
 
 .has-submenu:hover .dropdown-arrow::after {
-  transform: translateY(-50%) rotate(90deg);
+  transform: rotate(90deg);
 }
 
+.side-navbar:not(.expanded) .menu-text,
 .side-navbar:not(.expanded) .dropdown-arrow {
   display: none;
 }
@@ -246,7 +264,7 @@
   background-color: var(--secondary-dark);
 }
 
-/* Responsive styles */
+/* Mobile styles */
 @media (max-width: 768px) {
   .side-navbar {
     width: 60px;
@@ -254,6 +272,90 @@
   
   .side-navbar.expanded {
     width: 280px;
+  }
+
+  /* Show elements when expanded in mobile */
+  .side-navbar.expanded .menu-text,
+  .side-navbar.expanded .brand-text,
+  .side-navbar.expanded .brand-logo,
+  .side-navbar.expanded .user-role,
+  .side-navbar.expanded .logout-text,
+  .side-navbar.expanded .login-text {
+    display: inline-block !important;
+  }
+
+  .side-navbar.expanded .menu-text {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .side-navbar.expanded .menu-link {
+    padding: 0.75rem 1rem;
+    justify-content: flex-start;
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+  }
+
+  .side-navbar.expanded .brand a {
+    display: flex !important;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Hide elements when collapsed in mobile */
+  .side-navbar:not(.expanded) .menu-text,
+  .side-navbar:not(.expanded) .brand-text,
+  .side-navbar:not(.expanded) .brand-logo,
+  .side-navbar:not(.expanded) .user-role,
+  .side-navbar:not(.expanded) .logout-text,
+  .side-navbar:not(.expanded) .login-text,
+  .side-navbar:not(.expanded) .dropdown-arrow {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Show only icons when collapsed */
+  .side-navbar:not(.expanded) .menu-link {
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .side-navbar:not(.expanded) .menu-icon {
+    margin: 0;
+  }
+
+  /* Ensure submenu text is visible */
+  .side-navbar.expanded .submenu-link {
+    display: flex !important;
+    padding-left: 3rem;
+  }
+
+  .side-navbar.expanded .submenu-link .menu-text {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .side-navbar.expanded .logout-btn,
+  .side-navbar.expanded .login-btn {
+    width: 100%;
+    padding: 0.5rem;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .side-navbar.expanded .dropdown-arrow {
+    display: flex !important;
+    margin-left: 0;
+    margin-right: 4px;
+  }
+
+  .side-navbar:not(.expanded) .dropdown-arrow {
+    display: none !important;
   }
 }
 

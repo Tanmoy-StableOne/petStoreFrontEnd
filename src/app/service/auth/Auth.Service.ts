@@ -30,7 +30,7 @@ export class AuthService {
 
   private login(email: string, password: string, microservice: MICROSERVICE_NAME, expectedRole: USER_ROLE): Observable<LoginResponse> {
     const loginRequest: LoginRequest = { email, password };
-    const endpoint = GetAPIEndpoint(microservice, 'base') + '/login';
+    const endpoint = GetAPIEndpoint(microservice, 'login');
 
     return this.http.post<LoginResponse>(endpoint, loginRequest)
       .pipe(

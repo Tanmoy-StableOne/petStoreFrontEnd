@@ -359,4 +359,29 @@
   }
 }
 
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.profile-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-icon {
+  font-size: 24px;
+}
+
+.profile-text {
+  font-size: 14px;
+}
+
 

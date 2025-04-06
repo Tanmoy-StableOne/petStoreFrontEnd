@@ -5,28 +5,32 @@
     </mat-card-header>
     <mat-card-content>
       <div class="login-options">
-        <button mat-raised-button color="primary" routerLink="/login/customer-login">
+        <button *ngIf="!isLoggedIn" mat-raised-button color="primary" routerLink="/login/customer-login">
           <mat-icon>person</mat-icon>
           Customer Login
         </button>
-        <button mat-raised-button color="accent" routerLink="/login/admin-login">
+        <button *ngIf="!isLoggedIn" mat-raised-button color="accent" routerLink="/login/admin-login">
           <mat-icon>admin_panel_settings</mat-icon>
           Admin Login
         </button>
-        <button mat-raised-button color="warn" routerLink="/login/master-login">
+        <button *ngIf="!isLoggedIn" mat-raised-button color="warn" routerLink="/login/master-login">
           <mat-icon>supervisor_account</mat-icon>
           Master Login
         </button>
-        <button mat-raised-button color="primary" routerLink="/login/seller-login">
+        <button *ngIf="!isLoggedIn" mat-raised-button color="primary" routerLink="/login/seller-login">
           <mat-icon>store</mat-icon>
           Seller Login
         </button>
-        <button mat-raised-button color="accent" routerLink="/login/doctor-login">
+        <button *ngIf="!isLoggedIn" mat-raised-button color="accent" routerLink="/login/doctor-login">
           <mat-icon>medical_services</mat-icon>
           Doctor Login
         </button>
+        <button *ngIf="isLoggedIn" mat-raised-button color="primary" routerLink="/login/my-profile">
+          <mat-icon>account_circle</mat-icon>
+          My Profile
+        </button>
       </div>
-      <div class="registration-section">
+      <div class="registration-section" *ngIf="!isLoggedIn">
         <h3>New User? Register Here</h3>
         <div class="registration-options">
           <button mat-raised-button color="primary" routerLink="/register/customer">

@@ -1,65 +1,54 @@
 import { MICROSERVICE_NAME } from "../constants/Enums";
 
-export type APIEndpoint = string;
-
 export interface CoreEndpoints {
-  base: APIEndpoint;
-  getNavbar: APIEndpoint;
-  getProducts: APIEndpoint;
+  getNavbar: string;
+  getProducts: string;
 }
 
 export interface AuthEndpoints {
-  base: APIEndpoint;
-  login: APIEndpoint;
-  register: APIEndpoint;
-  logout: APIEndpoint;
-  refresh: APIEndpoint;
+  login: string;
+  register: string;
+  logout: string;
+  refresh: string;
+  getProfile: string;
 }
 
 export interface UserEndpoints {
-  base: APIEndpoint;
-  getProfile: APIEndpoint;
-  updateProfile: APIEndpoint;
+  getProfile: string;
+  updateProfile: string;
 }
 
 export interface AdminEndpoints {
-  base: APIEndpoint;
-  getDashboard: APIEndpoint;
-  getUsers: APIEndpoint;
+  getDashboard: string;
+  getUsers: string;
 }
 
 export interface ChatEndpoints {
-  base: APIEndpoint;
-  getMessages: APIEndpoint;
-  sendMessage: APIEndpoint;
+  getMessages: string;
+  sendMessage: string;
 }
 
 export interface PaymentEndpoints {
-  base: APIEndpoint;
-  createPayment: APIEndpoint;
-  getPaymentStatus: APIEndpoint;
+  createPayment: string;
+  getPaymentStatus: string;
 }
 
 export interface S3Endpoints {
-  base: APIEndpoint;
-  uploadFile: APIEndpoint;
-  getFile: APIEndpoint;
+  uploadFile: string;
+  getFile: string;
 }
 
 export interface SanctionEndpoints {
-  base: APIEndpoint;
-  checkStatus: APIEndpoint;
+  checkStatus: string;
 }
 
 export interface SellerEndpoints {
-  base: APIEndpoint;
-  getProducts: APIEndpoint;
-  addProduct: APIEndpoint;
+  getProducts: string;
+  addProduct: string;
 }
 
 export interface LivenessEndpoints {
-  base: APIEndpoint;
-  healthCheck: APIEndpoint;
+  healthCheck: string;
 }
 
 export interface APIEndpoints {

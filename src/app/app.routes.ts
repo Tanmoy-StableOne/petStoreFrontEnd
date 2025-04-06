@@ -36,7 +36,7 @@ import { CustomerLoginComponent } from './login/customer-login/customer-login.co
 import { MasterLoginComponent } from './login/master-login/master-login.component';
 import { AuthGuard } from './login/guards/auth.guard';
 import { USER_ROLE } from './constants/Enums';
-import { MyProfileComponent } from './components/my-profile/my-profile.component';
+import { MyProfileComponent } from './login/my-profile/my-profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -158,6 +158,7 @@ export const routes: Routes = [
     ]
   },
 
+  // My Profile route (protected)
   {
     path: 'my-profile',
     component: MyProfileComponent,

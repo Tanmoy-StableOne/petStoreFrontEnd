@@ -1,77 +1,74 @@
 import { MICROSERVICE_NAME } from "./Enums";
-import { APIEndpoints } from "../interfaces/endpoint.interface";
 
 export const EndpointType = {
   prod: "www.google.com",
   dev: "http://localhost:"
 };
 
-// Create a port mapping that uses MICROSERVICE_NAME values as keys
 const PORT_MAPPING: Record<MICROSERVICE_NAME, number> = {
-  [MICROSERVICE_NAME.ADMIN]: 8080,
-  [MICROSERVICE_NAME.AUTHENTICATION]: 8081,
-  [MICROSERVICE_NAME.CHAT]: 8082,
+  [MICROSERVICE_NAME.ADMIN]: 8081,
+  [MICROSERVICE_NAME.AUTHENTICATION]: 8082,
+  [MICROSERVICE_NAME.CHAT]: 8083,
   [MICROSERVICE_NAME.CORE]: 8084,
-  [MICROSERVICE_NAME.LIVENESS]: 8084,
   [MICROSERVICE_NAME.PAYMENT]: 8085,
-  [MICROSERVICE_NAME.S3]: 8086,
-  [MICROSERVICE_NAME.SANCTION]: 8087,
-  [MICROSERVICE_NAME.SELLER]: 8088,
-  [MICROSERVICE_NAME.USER]: 8089
+  [MICROSERVICE_NAME.SELLER]: 8086,
+  [MICROSERVICE_NAME.USER]: 8087,
+  [MICROSERVICE_NAME.LIVENESS]: 8088,
+  [MICROSERVICE_NAME.SANCTION]: 8089,
+  [MICROSERVICE_NAME.S3]: 8090
 };
 
-// Define all API endpoints
 export const Endpoints: APIEndpoints = {
   [MICROSERVICE_NAME.CORE]: {
-    base: "core",
     getNavbar: "navbar/get",
     getProducts: "products/all"
   },
   [MICROSERVICE_NAME.AUTHENTICATION]: {
-    base: "auth",
-    login: "auth/login",
-    register: "auth/register",
-    logout: "auth/logout",
-    refresh: "auth/refresh"
+    login: "login",
+    register: "register",
+    logout: "logout",
+    refresh: "refresh",
+    getProfile: "getProfile"
   },
   [MICROSERVICE_NAME.USER]: {
-    base: "user",
-    getProfile: "user/profile",
-    updateProfile: "user/update"
+    getProfile: "profile",
+    updateProfile: "update"
   },
   [MICROSERVICE_NAME.ADMIN]: {
-    base: "admin",
-    getDashboard: "admin/dashboard",
-    getUsers: "admin/users"
+    getDashboard: "dashboard",
+    getUsers: "users"
   },
   [MICROSERVICE_NAME.CHAT]: {
-    base: "chat",
-    getMessages: "chat/messages",
-    sendMessage: "chat/send"
+    getMessages: "messages",
+    sendMessage: "send"
   },
   [MICROSERVICE_NAME.PAYMENT]: {
-    base: "payment",
-    createPayment: "payment/create",
-    getPaymentStatus: "payment/status"
+    createPayment: "create",
+    getPaymentStatus: "status"
   },
   [MICROSERVICE_NAME.S3]: {
-    base: "s3",
-    uploadFile: "s3/upload",
-    getFile: "s3/get"
+    uploadFile: "upload",
+    getFile: "get"
   },
   [MICROSERVICE_NAME.SANCTION]: {
-    base: "sanction",
-    checkStatus: "sanction/check"
+    checkStatus: "check"
   },
   [MICROSERVICE_NAME.SELLER]: {
-    base: "seller",
-    getProducts: "seller/products",
-    addProduct: "seller/product/add"
+    getProducts: "products",
+    addProduct: "product/add"
   },
   [MICROSERVICE_NAME.LIVENESS]: {
-    base: "liveness",
     healthCheck: "health"
   }
+};
+
+
+export type EndpointMap = {
+  [key: string]: string; // ← this is crucial
+};
+
+export type APIEndpoints = {
+  [key in MICROSERVICE_NAME]: EndpointMap;
 };
 
 /**
@@ -81,15 +78,15 @@ export const Endpoints: APIEndpoints = {
  * @returns The complete API endpoint URL
  * @throws Error if the endpoint doesn't exist
  */
-export function GetAPIEndpoint<T extends MICROSERVICE_NAME>(
-  microServiceName: T,
-  endpointKey: keyof APIEndpoints[T]
+export function GetAPIEndpoint(
+  microServiceName: MICROSERVICE_NAME,
+  endpointKey: string
 ): string {
-  const endpoints = Endpoints[microServiceName];
-  const endpoint = endpoints[endpointKey as keyof typeof endpoints];
+  const endpoints = Endpoints[microServiceName]; // endpoints is EndpointMap
+  const endpoint = endpoints?.[endpointKey]; // ✅ no error now
 
   if (!endpoint) {
-    throw new Error(`API endpoint '${String(endpointKey)}' not found for microservice '${microServiceName}'`);
+    throw new Error(`API endpoint '${endpointKey}' not found for microservice '${microServiceName}'`);
   }
 
   const port = PORT_MAPPING[microServiceName];
